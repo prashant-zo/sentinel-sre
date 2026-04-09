@@ -1,52 +1,52 @@
 - name: Configure Sentinel server and Deploy App
-  host: all
+  hosts: all
   become: yes
   vars:
     project_dir: /home/ubuntu/sentinel
 
-tasks:
-  - name: Update apt cache
-    apt:
-      update_cache: yes
-      cache_valid_time: 3600
-
-  - name: Install docker and docker-compose
-    apt:
-      name:
-        - docker.io
-        - docker-compose-v2
-      state: present
-
-  - name: Ensure docker is running and elabled on boot
-    systemd:
-      name: docker
-      state: started
-      enabled: yes
-
-  - name: Add ubuntu user to docker group
-    user:
-      name: ubuntu
-      groups: docker
-      append: yes
-
-  - name: Copy files from local machine to aws server
-    copy:
-      src: "../{{ item }}"
-      dest: "{{ project_dir }}/"
-      owner: ubuntu
-      group: ubuntu
-    loop:
-      - app
-      - monitor
-      - docker-compose.yml
-
-  - name: Remove running containers if any exist from previous deploy
-    command: docker compose down
-    args:
-      chdir: "{{ project_dir }}"
-    ignore_errors: yes
-
-  - name: Build and start sentinel system
-    command: docker compose up -d --build
-    args:
-      chdir: "{{ project_dir }}"
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+  
+    - name: Install docker and docker-compose
+      apt:
+        name:
+          - docker.io
+          - docker-compose-v2
+        state: present
+  
+    - name: Ensure docker is running and elabled on boot
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+  
+    - name: Add ubuntu user to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+  
+    - name: Copy files from local machine to aws server
+      copy:
+        src: "../{{ item }}"
+        dest: "{{ project_dir }}/"
+        owner: ubuntu
+        group: ubuntu
+      loop:
+        - app
+        - monitor
+        - docker-compose.yml
+ 
+    - name: Remove running containers if any exist from previous deploy
+      command: docker compose down
+      args:
+        chdir: "{{ project_dir }}"
+      ignore_errors: yes
+  
+    - name: Build and start sentinel system
+      command: docker compose up -d --build
+      args:
+        chdir: "{{ project_dir }}"
