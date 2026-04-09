@@ -1,3 +1,13 @@
+terraform {
+  backend "s3" {
+    bucket       = "sentinel-tf-state-prashant-90109"
+    key          = "global/s3/terraform.tfstate"
+    region       = "ap-south-1"
+    use_lockfile = true
+    encrypt      = true
+  }
+}
+
 provider "aws" {
   region = var.aws_region
 }
