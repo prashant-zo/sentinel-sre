@@ -27,6 +27,8 @@ jobs:
 
       - name: Setup terraform 
         uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
 
       - name: Terraform init & apply
         working-directory: ./infra
