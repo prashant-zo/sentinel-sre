@@ -72,7 +72,7 @@ docker logs -f sentinel-monitor
 curl http://localhost:5000/crash
 ```
 
-After `/crash`, monitor logs should show detection and container restart.
+After `/crash`, monitor logs should show detection and container restart
 
 ## Endpoints
 
